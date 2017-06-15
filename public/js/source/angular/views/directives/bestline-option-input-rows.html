@@ -1,0 +1,65 @@
+<div class="bestlineFabricOptions directives order-options" style="margin-bottom:16px;">
+    <div ng-if="orderOptions.length">
+        <div class="row option-rows-header">
+            <div class="col-md-3"><label>Option</label></div>
+            <div class="col-md-4"><label>Sub-Option</label></div>
+            <div class="col-md-2 text-center"><label>Data</label></div>
+            <div class="col-md-1 option-rows-header-price">
+                <label ng-show="settings.type === 'line'">Price</label>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+    </div>
+    <div ng-repeat="orderOption in orderOptions" style="">
+        <div>
+            <div class="row option-row" ng-class="$index === (orderOptions.length -1) ?  'last-option' : ''">
+                <div class="col-md-3">
+                    <div class="form-group" ng-show="!orderOption.optionSelect.loading">
+                        <select class="form-control input-sm select-xs"
+                            ng-model="orderOption.option_id"
+                            ng-options="optionOption.id as optionOption.name for optionOption in options | filter:vmOptionRows.optionFilter(orderOption)"
+                            ng-change="optionSelectChange(orderOption)">
+                            <option value="">Select Option...</option>
+                        </select>
+                    </div>
+                    <div ng-show="orderOption.optionSelect.loading"><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="customSelect jsCustomSelect clearfix" ng-show="!orderOption.subOptionSelect.loading">
+                        <select class="form-control input-sm select-xs"
+                            ng-model="orderOption.sub_option_id"
+                            ng-options="subOptionOptions.id as subOptionOptions.name for subOptionOptions in orderOption.subOptionSelect.options"
+                            ng-change="subOptionSelectChange(orderOption)"
+                            ng-disabled="!orderOption.option_id || orderOption.subOptionSelect.options.length === 0">
+                            <option value="">Select Suboption...</option>
+                        </select>
+                    </div>
+                    <div ng-show="orderOption.subOptionSelect.loading"><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
+                </div>
+                <div class="col-md-2 option-row-col option-data">
+                    <div ng-show="orderOption.data">
+                        <div class="form-group optionDataInputs" ng-repeat="optionData in optionDataArray" ng-if="orderOption.data['show_' + optionData.key] || orderOption.data[optionData.key]">
+                            <label><small>{[{ optionData.name }]}:</small></label>
+                            <input ng-model="orderOption.data[optionData.key]" class="form-control input-xs" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-1 option-row-col" ng-show="settings.type === 'line'" style="">
+                    <input ng-model="orderOption.price" class="option-price" style="" type="text" disabled/>
+                </div>
+                <div class="col-md-2 option-row-col">
+                    <a href="" class="text-danger option-delete pull-right"
+                        ng-show="!orderOption.deleting"
+                        ng-click="deleteOption(orderOption);">
+                       <i class="fa fa-trash text-danger"></i>
+                       <small>Option</small>
+                    </a>
+
+                    <div ng-show="orderOption.deleting"><i class="fa fa-circle-o-notch fa-spin fa-2x"></i></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <p ng-show="orderOptions.length === 0" class="text-muted"><small>This has no options. Click the "Add Option" button.</small></p>
+</div>
